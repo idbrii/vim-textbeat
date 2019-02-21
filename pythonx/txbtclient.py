@@ -20,11 +20,11 @@ class VimTextbeatPlugin:
         self.process_buf = {}
         self.playing = False
         self.TXBT_PATH = None
-        
+
     def stop(self):
         term = 0
         for p in self.processes:
-            if p.poll()==None:
+            if p.poll() is None:
                 try:
                     p.terminate()
                 except:
@@ -34,19 +34,20 @@ class VimTextbeatPlugin:
         self.processes = []
         return term
     def refresh(self):
-        self.processes = filter(lambda p: p.poll()!=None, self.processes)
+        self.processes = filter(lambda p: p.poll() is not None, self.processes)
     def play(self):
-        if not self.check_paths(): return
+        if not self.check_paths():
+            return
         if self.stop():
             return
         vim.command('call txbt#starttimer()')
         vim.command('set cursorline')
         print('Playing')
-        p = subprocess.Popen([\
-            self.TXBT_PATH,\
+        p = subprocess.Popen([
+            self.TXBT_PATH,
             '--follow',
-            '+'+str(max(0,vim.current.window.cursor[0]-1)),\
-            vim.current.buffer.name\
+            '+'+str(max(0,vim.current.window.cursor[0]-1)),
+            vim.current.buffer.name
         ],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             bufsize=1, universal_newlines=True
@@ -54,23 +55,23 @@ class VimTextbeatPlugin:
         self.processes.append(p)
         self.process_buf[p] = ''
     def playline(self):
-        if not self.check_paths(): return
+        if not self.check_paths():
+            return
         self.stop()
-        p = subprocess.Popen([\
-            self.TXBT_PATH,\
-            '-l',\
-            vim.current.line\
+        p = subprocess.Popen([
+            self.TXBT_PATH,
+            '-l',
+            vim.current.line
         ], stdout=self.DEVNULL, stderr=self.DEVNULL)
         self.processes.append(p)
         self.process_buf[p] = ''
     def poll(self):
         running = 0
-        done = False
         active = 0
         for p in self.processes:
             # phash = hash(p)
             working = False
-            if p.poll()==None:
+            if p.poll() is None:
                 active += 1
             while True:
                 sel = None
@@ -112,11 +113,12 @@ class VimTextbeatPlugin:
                         if ctrl[0]=='=':
                             ctrl = ctrl[1:]
                         cs = ctrl.split(',')
-                        if len(cs)==1: cs.append('0')
+                        if len(cs)==1:
+                            cs.append('0')
                         x = str(int(cs[0])+int(cs[1]))
                         if len(cs)>=2:
-                            vim.command('let &l:colorcolumn = join(range('+\
-                                x +',100,'+cs[0]+'),\',\')')
+                            vim.command('let &l:colorcolumn = join(range('+
+                                        x +',100,'+cs[0]+'),\',\')')
                             return
 
 
