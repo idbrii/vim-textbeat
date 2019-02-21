@@ -1,9 +1,3 @@
-if !exists("g:textbeat_previous_virtualedit")
-    let g:textbeat_previous_virtualedit = &virtualedit
-endif
-
-set virtualedit=all
-
 if v:version < 800
     finish
 endif
@@ -45,6 +39,12 @@ command! -buffer -nargs=0 TextbeatReload call txbt#reload()
 command! -buffer -nargs=0 TextbeatStartTimer call txbt#starttimer()
 command! -buffer -nargs=0 TextbeatStopTimer call txbt#stoptimer()
 
+if !exists("g:textbeat_previous_virtualedit")
+    let g:textbeat_previous_virtualedit = &virtualedit
+endif
+
+set virtualedit=all
+
 exec 'augroup textbeat-'. bufnr('%')
     au!
     au  BufRead,BufWritePost <buffer> TextbeatReload
@@ -62,11 +62,5 @@ if exists("g:textbeat_path")
     pyx txbtclient.VimTextbeat.set_txbt_path(vim.eval("g:textbeat_path"))
 else
     pyx txbtclient.VimTextbeat.set_txbt_path("textbeat")
-endif
-
-if exists("g:textbeat_python")
-    pyx txbtclient.VimTextbeat.set_python(vim.eval("g:textbeat_python"))
-else
-    pyx txbtclient.VimTextbeat.set_python("python")
 endif
 

@@ -3,9 +3,6 @@ import vim,subprocess,os,select
 
 class VimTextbeatPlugin:
     DEVNULL = open(os.devnull, 'w')
-    
-    def set_python(self,p):
-        self.PYTHON = os.path.expanduser(p)
 
     def set_txbt_path(self,p):
         self.TXBT_PATH = os.path.expanduser(p)
@@ -13,7 +10,6 @@ class VimTextbeatPlugin:
     def check_paths(self):
         if not self.TXBT_PATH:
             print("vim-textbeat: in your .vimrc, set the locations:")
-            # print("   let g:python_path = '/usr/bin/python'")
             print("   let g:textbeat_path = '~/bin/textbeat/txbt'")
             print("In the future, this will be automatic.")
             return False
