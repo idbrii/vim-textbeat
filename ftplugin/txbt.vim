@@ -45,12 +45,12 @@ endif
 
 set virtualedit=all
 
-exec 'augroup textbeat-'. bufnr('%')
-    au!
+augroup textbeat
+    au! * <buffer>
     au  BufRead,BufWritePost <buffer> TextbeatReload
     au  BufLeave <buffer> let &virtualedit = g:textbeat_previous_virtualedit
     au  BufEnter <buffer> let &virtualedit = 'all'
-exec 'augroup END'
+augroup END
 
 if !exists("g:textbeat_no_mappings") || !g:textbeat_no_mappings
     "nmap <silent><buffer> <cr><cr> :TextbeatPlay<cr>
